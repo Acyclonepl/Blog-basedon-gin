@@ -1,0 +1,23 @@
+Server:
+  RunMdoe:debug
+  HttpPort:8000
+  ReadTimeout:60
+  WriteTimeout:60
+App:
+  DefaultPageSize:10
+  MaxPageSize:100
+  LogSavePath:storage/logs
+  LogFileName:app
+  LogFileExt:.log
+Database:
+  DBType:PostgreSQL
+  Username:postgres
+  Password:K70Vihwgu
+  Host:localhost
+  Port:5432
+  DBName:blog_service
+  TablePrefix:blog_
+  Charset:utf8
+  ParseTime:True
+  MaxIdleConns:10
+  MaxOpenConns:30
