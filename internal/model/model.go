@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Acyclonepl/Blog-basedon-gin/global"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/setting"
 	"gorm.io/driver/postgres" // 导入 PostgreSQL 驱动
 	"gorm.io/gorm"
@@ -48,4 +49,16 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
 	return db, nil
+}
+
+// tag.go
+type TagSwagger struct {
+	List  []*Tag
+	Pager *app.Pager
+}
+
+// article.go
+type ArticleSwagger struct {
+	List  []*Article
+	Pager *app.Pager
 }
