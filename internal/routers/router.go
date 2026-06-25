@@ -2,6 +2,7 @@ package routers
 
 import (
 	_ "github.com/Acyclonepl/Blog-basedon-gin/docs" // swag init 生成的文档
+	"github.com/Acyclonepl/Blog-basedon-gin/internal/middleware"
 	v1 "github.com/Acyclonepl/Blog-basedon-gin/internal/routers/api/v1"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"     // 静态文件包
@@ -12,6 +13,7 @@ func NewRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.Translations())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	article := v1.NewArticle()
 	tag := v1.NewTag()
