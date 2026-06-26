@@ -93,7 +93,7 @@ func (a Article) ListByTagID(db *gorm.DB, tagID uint32, pageOffset, pageSize int
 }
 
 func (a Article) CountByTagID(db *gorm.DB, tagID uint32) (int, error) {
-	var count int
+	var count int64
 	err := db.Table(ArticleTag{}.TableName()+" AS at").
 		Joins("LEFT JOIN `"+Tag{}.TableName()+"` AS t ON at.tag_id = t.id").
 		Joins("LEFT JOIN `"+Article{}.TableName()+"` AS ar ON at.article_id = ar.id").
@@ -102,7 +102,8 @@ func (a Article) CountByTagID(db *gorm.DB, tagID uint32) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	return count, nil
+	res := int(count)
+	return res, nil
 }
 
 // CreateArticleRequest 创建文章请求参数

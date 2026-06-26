@@ -7,12 +7,12 @@ import (
 
 	"github.com/Acyclonepl/Blog-basedon-gin/global"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/setting"
-	otgorm "github.com/eddycjy/opentracing-gorm"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
+	gormopentracing "gorm.io/plugin/opentracing"
 )
 
 const (
@@ -31,7 +31,7 @@ type Model struct {
 }
 
 // NewDBEngine 初始化数据库引擎（PostgreSQL + GORM v2）
-func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
+func NewDBEngine(databaseSetting *setting.DatabaseSetting) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=Asia/Shanghai",
 		databaseSetting.Host,
 		databaseSetting.Username,
@@ -61,6 +61,9 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	db.Callback().Create().Before("gorm:create").Register("my:update_timestamps_on_create", updateTimeStampForCreateCallback)
 	db.Callback().Update().Before("gorm:update").Register("my:update_timestamp_on_update", updateTimeStampForUpdateCallback)
 	db.Callback().Delete().Before("gorm:delete").Register("my:soft_delete", deleteCallback)
+	if err := db.Use(gormopentracing.New()); err != nil {
+		return nil, err
+	}
 
 	// 连接池配置
 	sqlDB, err := db.DB()
@@ -69,7 +72,6 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	}
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
-	otgorm.AddGormCallbacks(db)
 	return db, nil
 }
 
@@ -99,9 +101,9 @@ func updateTimeStampForCreateCallback(db *gorm.DB) {
 
 	// 处理 CreatedOn
 	if field := stmt.Schema.LookUpField("CreatedOn"); field != nil {
-		fieldVal, zero := field.ValueOf(rv)
+		fieldVal, zero := field.ValueOf(db.Statement.Context, rv)
 		if zero {
-			if err := field.Set(rv, now); err != nil {
+			if err := field.Set(db.Statement.Context, rv, now); err != nil {
 				db.AddError(err)
 			}
 		}
@@ -110,9 +112,9 @@ func updateTimeStampForCreateCallback(db *gorm.DB) {
 
 	// 处理 ModifiedOn
 	if field := stmt.Schema.LookUpField("ModifiedOn"); field != nil {
-		_, zero := field.ValueOf(rv)
+		_, zero := field.ValueOf(db.Statement.Context, rv)
 		if zero {
-			if err := field.Set(rv, now); err != nil {
+			if err := field.Set(db.Statement.Context, rv, now); err != nil {
 				db.AddError(err)
 			}
 		}
@@ -142,7 +144,7 @@ func updateTimeStampForUpdateCallback(db *gorm.DB) {
 			rv = rv.Elem()
 		}
 		if rv.Kind() == reflect.Struct {
-			if err := field.Set(rv, time.Now().Unix()); err != nil {
+			if err := field.Set(db.Statement.Context, rv, time.Now().Unix()); err != nil {
 				db.AddError(err)
 			}
 		}
@@ -195,13 +197,13 @@ func deleteCallback(db *gorm.DB) {
 			rv = rv.Elem()
 		}
 		if rv.Kind() == reflect.Struct {
-			_ = deletedOnField.Set(rv, now)
-			_ = isDelField.Set(rv, 1)
+			_ = deletedOnField.Set(db.Statement.Context, rv, now)
+			_ = isDelField.Set(db.Statement.Context, rv, 1)
 		}
 	}
 }
 
-// addExtraSpaceIfExist 辅助函数（原代码保留，实际重构后未使用）
+// addExtraSpaceIfExist 辅助函数
 func addExtraSpaceIfExist(str string) string {
 	if str != "" {
 		return " " + str

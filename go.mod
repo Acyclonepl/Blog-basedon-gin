@@ -3,7 +3,6 @@ module github.com/Acyclonepl/Blog-basedon-gin
 go 1.25.0
 
 require (
-	github.com/eddycjy/opentracing-gorm v0.0.0-20200209122056-516a807d2182
 	github.com/gin-gonic/gin v1.12.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/viper v1.21.0
@@ -29,9 +28,7 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/pgx/v5 v5.6.0 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
-	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/smacker/opentracing-gorm v0.0.0-20181207094635-cd4974441042 // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	golang.org/x/mod v0.37.0 // indirect
@@ -46,7 +43,7 @@ require (
 	github.com/bytedance/sonic v1.15.2 // indirect
 	github.com/bytedance/sonic/loader v0.5.1 // indirect
 	github.com/cloudwego/base64x v0.1.7 // indirect
-	github.com/fsnotify/fsnotify v1.10.1 // indirect
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/gin-contrib/sse v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.1
@@ -90,4 +87,5 @@ require (
 	golang.org/x/text v0.38.0 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gorm.io/driver/postgres v1.6.0
+	gorm.io/plugin/opentracing v0.0.0-20211220013347-7d2b2af23560
 )

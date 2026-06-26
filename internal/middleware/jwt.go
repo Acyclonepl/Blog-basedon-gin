@@ -25,16 +25,11 @@ func JWT() gin.HandlerFunc {
 		} else {
 			_, err := app.ParseToken(token)
 			if err != nil {
-				var ve *jwt.ValidationError
-				if errors.As(err, &ve) {
-					switch ve.Errors {
-					case jwt.ValidationErrorExpired:
-						ecode = errcode.UnauthorizedTokenTimeout
-					default:
-						ecode = errcode.UnauthorizedTokenError
-					}
-				} else {
-					// 非验证类错误（如解析失败）
+				// jwt v5 通过 errors.Is 判断具体错误类型
+				switch {
+				case errors.Is(err, jwt.ErrTokenExpired):
+					ecode = errcode.UnauthorizedTokenTimeout
+				default:
 					ecode = errcode.UnauthorizedTokenError
 				}
 			}
