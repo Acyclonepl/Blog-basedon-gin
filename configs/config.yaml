@@ -1,7 +1,8 @@
-Server: RunMdoe:debug
-  HttpPort:8000
-  ReadTimeout:60
-  WriteTimeout:60
+Server:
+  RunMode: debug
+  HttpPort: 7771
+  ReadTimeout: 60
+  WriteTimeout: 60
 App:
   DefaultPageSize: 10
   MaxPageSize: 100
@@ -10,7 +11,7 @@ App:
   LogFileName: app
   LogFileExt: .log
   UploadSavePath: storage/uploads
-  UploadServerUrl: http://localhost:8080/static
+  UploadServerUrl: http://localhost:7742/static
   UploadImageMaxSize: 5 # MB
   UploadImageAllowExts:
     - .jpg
@@ -29,14 +30,15 @@ JWT:
   Secret: strongsecret_123456
   Issuer: blog-service
   Expire: 7200
-Database: DBType:PostgreSQL
-  Username:postgres
-  Password:K70Vihwgu
-  Host:localhost
-  Port:5432
-  DBName:blog_service
-  TablePrefix:blog_
-  Charset:utf8
-  ParseTime:True
-  MaxIdleConns:10
-  MaxOpenConns:30
+Database:
+  DBType: PostgreSQL
+  Username: postgres
+  Password: K70Vihwgu
+  Host: localhost
+  Port: 5432
+  DBName: blog_service
+  TablePrefix: blog_
+  Charset: utf8
+  ParseTime: True
+  MaxIdleConns: 10
+  MaxOpenConns: 30
