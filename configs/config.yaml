@@ -26,7 +26,7 @@ Email:
   To:
     - xxx
 JWT:
-  Secret: eddycjy
+  Secret: strongsecret_123456
   Issuer: blog-service
   Expire: 7200
 Database: DBType:PostgreSQL

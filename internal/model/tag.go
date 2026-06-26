@@ -1,6 +1,9 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+	"gorm.io/gorm"
+)
 
 type Tag struct {
 	*Model
@@ -11,6 +14,12 @@ type Tag struct {
 func (t Tag) TableName() string {
 	return "blog_tag"
 }
+
+type TagSwagger struct {
+	List  []*Tag
+	Pager *app.Pager
+}
+
 func (t Tag) Count(db *gorm.DB) (int, error) {
 	var count int64
 	if t.Name != "" {
@@ -37,6 +46,25 @@ func (t Tag) List(db *gorm.DB, pageOffset, pageSize int) ([]*Tag, error) {
 		return nil, err
 	}
 	return tags, nil
+}
+func (t Tag) ListByIDs(db *gorm.DB, ids []uint32) ([]*Tag, error) {
+	var tags []*Tag
+	db = db.Where("state = ? AND is_del = ?", t.State, 0)
+	err := db.Where("id IN (?)", ids).Find(&tags).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	return tags, nil
+}
+func (t Tag) Get(db *gorm.DB) (Tag, error) {
+	var tag Tag
+	err := db.Where("id = ? AND is_del = ? AND state = ?", t.ID, 0, t.State).First(&tag).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return tag, err
+	}
+
+	return tag, nil
 }
 func (t Tag) Create(db *gorm.DB) error {
 	return db.Create(&t).Error

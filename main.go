@@ -10,8 +10,16 @@ import (
 	"github.com/Acyclonepl/Blog-basedon-gin/internal/routers"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/logger"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/setting"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/tracer.go"
 	"github.com/gin-gonic/gin"
 	"github.com/natefinch/lumberjack"
+)
+
+var (
+	port      string
+	runMode   string
+	config    string
+	isVersion bool
 )
 
 func init() {
@@ -25,6 +33,9 @@ func init() {
 	}
 	if err := setupDBEngine(); err != nil {
 		log.Fatalf("init.setupDBEngine err: %v", err)
+	}
+	if err := setupTracer(); err != nil {
+		log.Fatalf("init.setupTracer err: %v,err")
 	}
 
 }
@@ -53,9 +64,6 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
-	global.ServerSetting = &setting.ServerSettingS{}
-	global.AppSetting = &setting.AppSettingS{}
-	global.DatabaseSetting = &setting.DatabaseSettingS{}
 	err = setting.ReadSection("Server", global.ServerSetting)
 	if err != nil {
 		return err
@@ -68,6 +76,18 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
+	err = setting.ReadSection("JWT", &global.JWTSetting)
+	if err != nil {
+		return err
+	}
+	err = setting.ReadSection("Email", &global.EmailSetting)
+	if err != nil {
+		return err
+	}
+	global.ServerSetting = &setting.ServerSettingS{}
+	global.AppSetting = &setting.AppSettingS{}
+	global.DatabaseSetting = &setting.DatabaseSettingS{}
+	global.JWTSetting.Expire *= time.Second
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
 	return nil
@@ -87,4 +107,15 @@ func setupDBEngine() error {
 	global.DBEngine, err = model.NewDBEngine(global.DatabaseSetting)
 	return err
 
+}
+func seetupTracer() error {
+	jaegerTracer, _, err := tracer.NewJaegerTracer(
+		"blog-service",
+		"127.0.0.1:6831",
+	)
+	if err != nil {
+		return err
+	}
+	global.Tracer = jaegerTracer
+	return nil
 }

@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"github.com/go-programming-tour-book/blog-service/internal/model"
-	"github.com/go-programming-tour-book/blog-service/pkg/app"
+	"github.com/Acyclonepl/Blog-basedon-gin/internal/model"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
 )
 
 func (d *Dao) GetTag(id uint32, state uint8) (model.Tag, error) {

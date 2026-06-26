@@ -1,6 +1,9 @@
 package service
 
-import "github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+import (
+	"github.com/Acyclonepl/Blog-basedon-gin/internal/model"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+)
 
 type CountTagRequest struct {
 	Name  string `form:"name" binding:"max=100"`
