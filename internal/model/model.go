@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/Acyclonepl/Blog-basedon-gin/global"
-	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/setting"
+	otgorm "github.com/eddycjy/opentracing-gorm"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -69,7 +69,7 @@ func NewDBEngine(databaseSetting *setting.DatabaseSettingS) (*gorm.DB, error) {
 	}
 	sqlDB.SetMaxIdleConns(databaseSetting.MaxIdleConns)
 	sqlDB.SetMaxOpenConns(databaseSetting.MaxOpenConns)
-
+	otgorm.AddGormCallbacks(db)
 	return db, nil
 }
 
@@ -207,13 +207,4 @@ func addExtraSpaceIfExist(str string) string {
 		return " " + str
 	}
 	return ""
-}
-
-type TagSwagger struct {
-	List  []*Tag
-	Pager *app.Pager
-}
-type ArticleSwagger struct {
-	List  []*Article
-	Pager *app.Pager
 }

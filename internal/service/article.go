@@ -1,6 +1,10 @@
 package service
 
-import "github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+import (
+	"github.com/Acyclonepl/Blog-basedon-gin/internal/dao"
+	"github.com/Acyclonepl/Blog-basedon-gin/internal/model"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+)
 
 type ArticleRequest struct {
 	ID    uint32 `form:"id" binding:"required,gte=1"`
