@@ -6,10 +6,10 @@ import (
 )
 
 var (
-	ServerSetting   *setting.ServerSettingS
-	AppSetting      *setting.AppSettingS
-	EmailSetting    *setting.EmailSettingS
-	JWTSetting      *setting.JWTSettingS
-	DatabaseSetting *setting.DatabaseSettingS
+	ServerSetting   *setting.ServerSetting
+	AppSetting      *setting.AppSetting
+	EmailSetting    *setting.EmailSetting
+	JWTSetting      *setting.JWTSetting
+	DatabaseSetting *setting.DatabaseSetting
 	Logger          *logger.Logger
 )

@@ -6,6 +6,7 @@ import (
 
 	"github.com/Acyclonepl/Blog-basedon-gin/global"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/app"
+	"github.com/Acyclonepl/Blog-basedon-gin/pkg/email"
 	"github.com/Acyclonepl/Blog-basedon-gin/pkg/errcode"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ func Recovery() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
-				global.Logger.WithCallersFrames().Errorf(c, "panic recover err: %v", err)
+				global.Logger.WithCallersFrames().Errorf("panic recover err: %v", err)
 
 				err := defailtMailer.SendMail(
 					global.EmailSetting.To,
@@ -30,7 +31,7 @@ func Recovery() gin.HandlerFunc {
 					fmt.Sprintf("错误信息: %v", err),
 				)
 				if err != nil {
-					global.Logger.Panicf(c, "mail.SendMail err: %v", err)
+					global.Logger.WithCallersFrames().Panicf("mail.SendMail err: %v", err)
 				}
 
 				app.NewResponse(c).ToErrorResponse(errcode.ServerError)

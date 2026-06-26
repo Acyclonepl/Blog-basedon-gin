@@ -4,13 +4,13 @@ import (
 	"time"
 )
 
-type ServerSettingS struct {
+type ServerSetting struct {
 	RunMode      string
 	HttpPort     string
 	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 }
-type AppSettingS struct {
+type AppSetting struct {
 	DefaultPageSize       int
 	MaxPageSize           int
 	DefaultContextTimeout time.Duration
@@ -22,7 +22,7 @@ type AppSettingS struct {
 	UploadImageMaxSize    int
 	UploadImageAllowExts  []string
 }
-type EmailSettingS struct {
+type EmailSetting struct {
 	Host     string
 	Port     int
 	UserName string
@@ -31,12 +31,12 @@ type EmailSettingS struct {
 	From     string
 	To       []string
 }
-type JWTSettingS struct {
+type JWTSetting struct {
 	Secret string
 	Issuer string
 	Expire time.Duration
 }
-type DatabaseSettingS struct {
+type DatabaseSetting struct {
 	DBType       string `mapstructure:"DBType"`
 	Username     string `mapstructure:"Username"`
 	Password     string `mapstructure:"Password"`

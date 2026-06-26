@@ -84,9 +84,9 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
-	global.ServerSetting = &setting.ServerSettingS{}
-	global.AppSetting = &setting.AppSettingS{}
-	global.DatabaseSetting = &setting.DatabaseSettingS{}
+	// global.ServerSetting 已在上面通过 ReadSection 初始化，无需再次赋值
+	//global.AppSetting = &setting.AppSetting{}
+	//global.DatabaseSetting = &setting.DatabaseSetting{}
 	global.JWTSetting.Expire *= time.Second
 	global.ServerSetting.ReadTimeout *= time.Second
 	global.ServerSetting.WriteTimeout *= time.Second
@@ -108,7 +108,7 @@ func setupDBEngine() error {
 	return err
 
 }
-func seetupTracer() error {
+func setupTracer() error {
 	jaegerTracer, _, err := tracer.NewJaegerTracer(
 		"blog-service",
 		"127.0.0.1:6831",
