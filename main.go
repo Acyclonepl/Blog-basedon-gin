@@ -35,7 +35,7 @@ func init() {
 		log.Fatalf("init.setupDBEngine err: %v", err)
 	}
 	if err := setupTracer(); err != nil {
-		log.Fatalf("init.setupTracer err: %v,err")
+		log.Fatalf("init.setupTracer err: %v", err)
 	}
 
 }
@@ -64,15 +64,15 @@ func setupSetting() error {
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("Server", global.ServerSetting)
+	err = setting.ReadSection("Server", &global.ServerSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("App", global.AppSetting)
+	err = setting.ReadSection("App", &global.AppSetting)
 	if err != nil {
 		return err
 	}
-	err = setting.ReadSection("Database", global.DatabaseSetting)
+	err = setting.ReadSection("Database", &global.DatabaseSetting)
 	if err != nil {
 		return err
 	}
