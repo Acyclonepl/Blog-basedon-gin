@@ -15,13 +15,6 @@ import (
 	"github.com/natefinch/lumberjack"
 )
 
-var (
-	port      string
-	runMode   string
-	config    string
-	isVersion bool
-)
-
 func init() {
 
 	if err := setupSetting(); err != nil {
